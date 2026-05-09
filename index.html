@@ -1,242 +1,749 @@
 <!DOCTYPE html>
-<html lang="fr" data-lang="fr">
+<html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Накипь / Pot-Bouille — Vasilii Berezin · théâtre · création 2027</title>
-<meta name="description" content="Adaptation théâtrale contemporaine de Pot-Bouille d'Émile Zola. Création 2027 entre la Fondation Fiminco (Romainville) et la scène parisienne.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Накипь / Pot-Bouille — Vasilii Berezin · théâtre · création 2027</title>
+    <meta name="description" content="Adaptation théâtrale contemporaine de Pot-Bouille d'Émile Zola. Création 2027 entre la Fondation Fiminco (Romainville) et la scène parisienne.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: #fff; text-decoration: none; text-underline-offset: 4px; }
+        a:hover { text-decoration: underline; }
+
+        /* Language switcher */
+        .lang-switch {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 200;
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.35);
+            font-family: inherit;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 4px 0;
+        }
+
+        .lang-switch button:hover { color: rgba(255,255,255,0.7); }
+        .lang-switch button.active {
+            color: #fff;
+            border-bottom: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* Language visibility */
+        [data-lang] { display: none; }
+        [data-lang].active { display: block; }
+        span[data-lang].active { display: inline; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            padding-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center 30%;
+            opacity: 0.12;
+            filter: invert(1) contrast(1.3);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, #000 5%, transparent 40%, transparent 60%, rgba(0,0,0,0.6) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-opener {
+            font-size: clamp(13px, 1.4vw, 15px);
+            opacity: 0.55;
+            font-style: italic;
+            max-width: 560px;
+            margin-bottom: 56px;
+            letter-spacing: 0.005em;
+            line-height: 1.65;
+        }
+
+        .hero-opener .opener-attr {
+            display: block;
+            margin-top: 14px;
+            font-style: normal;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.4;
+        }
+
+        .hero-title h1 {
+            font-size: clamp(48px, 10vw, 120px);
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 24px;
+        }
+
+        .hero-title h1 em {
+            display: block;
+            font-style: italic;
+            font-size: 0.45em;
+            opacity: 0.5;
+            letter-spacing: 0.02em;
+            font-weight: 300;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(14px, 2vw, 18px);
+            opacity: 0.6;
+            max-width: 540px;
+            letter-spacing: 0.02em;
+            margin-bottom: 28px;
+        }
+
+        .hero-epigraph {
+            font-size: clamp(13px, 1.5vw, 15px);
+            opacity: 0.45;
+            max-width: 520px;
+            font-style: italic;
+            letter-spacing: 0.01em;
+            line-height: 1.7;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            z-index: 2;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            writing-mode: vertical-rl;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Sections */
+        .section {
+            padding: 120px 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            margin-bottom: 40px;
+        }
+
+        .chapter-num {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            opacity: 0.35;
+            display: inline-block;
+            margin-right: 14px;
+        }
+
+        .section h2 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 40px;
+        }
+
+        .section h2 em {
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        .section p {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 22px;
+            max-width: 660px;
+        }
+
+        .section p strong {
+            font-weight: 500;
+            color: #fff;
+            opacity: 1;
+        }
+
+        .section p em {
+            font-style: italic;
+            opacity: 0.95;
+        }
+
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 0 auto;
+        }
+
+        /* Sketch images */
+        .sketch-container {
+            margin: 60px 0;
+            position: relative;
+        }
+
+        .sketch-container img {
+            width: 100%;
+            max-width: 700px;
+            display: block;
+            filter: invert(1) contrast(1.1);
+            opacity: 0.85;
+            margin: 0 auto;
+        }
+
+        .sketch-caption {
+            font-size: 12px;
+            opacity: 0.3;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        /* Full bleed sketch */
+        .sketch-full {
+            width: 100%;
+            padding: 0;
+            margin: 80px 0;
+            overflow: hidden;
+        }
+
+        .sketch-full img {
+            width: 100%;
+            max-width: 1200px;
+            display: block;
+            margin: 0 auto;
+            filter: invert(1) contrast(1.15);
+            opacity: 0.7;
+        }
+
+        /* Sketch pair */
+        .sketch-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 60px auto;
+            max-width: 900px;
+            padding: 0 24px;
+        }
+
+        .sketch-pair img {
+            width: 100%;
+            filter: invert(1) contrast(1.1);
+            opacity: 0.8;
+        }
+
+        /* Quote */
+        .quote-section {
+            padding: 140px 24px;
+            text-align: center;
+        }
+
+        .quote-section blockquote {
+            font-size: clamp(20px, 4vw, 36px);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.4;
+            max-width: 760px;
+            margin: 0 auto;
+            opacity: 0.92;
+            letter-spacing: -0.01em;
+        }
+
+        .quote-section .quote-attr {
+            margin-top: 24px;
+            font-size: 13px;
+            opacity: 0.4;
+            letter-spacing: 0.05em;
+        }
+
+        /* Timeline (calendrier) */
+        .timeline {
+            list-style: none;
+            margin-top: 32px;
+            padding: 0;
+        }
+
+        .timeline li {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 32px;
+            padding: 28px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            align-items: baseline;
+        }
+
+        .timeline .when {
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.45;
+            font-variant-numeric: tabular-nums;
+            padding-top: 4px;
+        }
+
+        .timeline .what {
+            font-size: 16px;
+            opacity: 0.85;
+            line-height: 1.55;
+        }
+
+        .timeline li:first-of-type .when { color: #fff; opacity: 0.85; }
+        .timeline li:first-of-type .what { color: #fff; opacity: 1; }
+
+        @media (max-width: 600px) {
+            .timeline li { grid-template-columns: 1fr; gap: 6px; }
+            .timeline .when { padding-top: 0; }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 56px 24px 48px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 13px;
+            opacity: 0.55;
+            text-align: center;
+        }
+
+        .footer .footer-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer .meta {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-top: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .section { padding: 80px 20px; }
+            .sketch-pair { grid-template-columns: 1fr; padding: 0 20px; }
+            .lang-switch { top: 20px; right: 20px; gap: 10px; }
+            .lang-switch button { font-size: 11px; }
+            .hero { padding: 24px 20px 60px; }
+            .hero-opener { margin-bottom: 40px; }
+        }
+
+        html { scroll-behavior: smooth; }
+
+        .fade-in {
+            opacity: 1;
+            transform: none;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .js-fade .fade-in {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            .js-fade .fade-in.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 
-<nav class="langs">
-  <button data-set-lang="fr" class="active">FR</button>
-  <span class="sep">·</span>
-  <button data-set-lang="ru">RU</button>
-  <span class="sep">·</span>
-  <button data-set-lang="en">EN</button>
-</nav>
+    <div class="lang-switch">
+        <button class="active" onclick="setLang('fr')">FR</button>
+        <button onclick="setLang('en')">EN</button>
+        <button onclick="setLang('ru')">RU</button>
+    </div>
 
-<!-- HERO -->
-<header class="preface">
-  <div class="frame">
-    <p class="opener">
-      <span data-tr="opener_fr">Vous avez vu cet immeuble. Cinq étages, des balcons en fer forgé, une porte cochère, un escalier de service à l'arrière. Vous l'avez vu de l'extérieur. Vous n'avez jamais vu ce qui se passe à l'intérieur.</span>
-      <span data-tr="opener_ru">Вы видели этот дом. Пять этажей, балконы кованого железа, парадная, чёрный ход. Вы видели его снаружи. Вы никогда не видели, что происходит внутри.</span>
-      <span data-tr="opener_en">You've seen that building. Five floors, wrought-iron balconies, a porte cochère, a service stair at the back. You've seen it from outside. You've never seen what happens within.</span>
-    </p>
-    <p class="opener-attribution">— En guise d'avertissement</p>
-  </div>
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="img/page-01.jpg" alt="Накипь / Pot-Bouille">
+        </div>
 
-  <h1 class="title">
-    <span class="t-fr" data-tr="title_fr">Pot-Bouille</span>
-    <span class="t-ru" data-tr="title_ru">Накипь</span>
-    <span class="t-en" data-tr="title_en">Pot-Bouille</span>
-  </h1>
+        <div class="hero-content">
+            <p class="hero-opener">
+                <span data-lang="fr" class="active">Vous avez vu cet immeuble. Cinq étages, des balcons en fer forgé, une porte cochère, un escalier de service à l'arrière. Vous l'avez vu de l'extérieur. Vous n'avez jamais vu ce qui se passe à l'intérieur.</span>
+                <span data-lang="en">You have seen that building. Five floors, wrought-iron balconies, a porte cochère, a service stair at the back. You have seen it from outside. You have never seen what happens within.</span>
+                <span data-lang="ru">Вы видели этот дом. Пять этажей, балконы кованого железа, парадная, чёрный ход. Вы видели его снаружи. Вы никогда не видели, что происходит внутри.</span>
+                <span class="opener-attr">
+                    <span data-lang="fr" class="active">— En guise d'avertissement</span>
+                    <span data-lang="en">— By way of warning</span>
+                    <span data-lang="ru">— Вместо предисловия</span>
+                </span>
+            </p>
 
-  <p class="subtitle">
-    <span data-tr="subtitle_fr">d'après Émile Zola · adaptation et mise en scène Vasilii Berezin · création 2027</span>
-    <span data-tr="subtitle_ru">по Эмилю Золя · адаптация и режиссура Василий Березин · премьера 2027</span>
-    <span data-tr="subtitle_en">after Émile Zola · adapted and directed by Vasilii Berezin · premiere 2027</span>
-  </p>
+            <div class="hero-title">
+                <h1>
+                    <span data-lang="fr" class="active">Pot-Bouille</span>
+                    <span data-lang="en">Pot-Bouille</span>
+                    <span data-lang="ru">Накипь</span>
+                    <em>
+                        <span data-lang="fr" class="active">spectacle · création 2027</span>
+                        <span data-lang="en">a spectacle · premiere 2027</span>
+                        <span data-lang="ru">спектакль · премьера 2027</span>
+                    </em>
+                </h1>
+            </div>
 
-  <p class="epigraph">
-    <span data-tr="epigraph_fr">Un immeuble. Six étages. Quinze adultères. Quatre suicides évités. Trois domestiques humiliées. Et l'escalier en marbre qui ne dit rien.</span>
-    <span data-tr="epigraph_ru">Дом. Шесть этажей. Пятнадцать измен. Четыре несостоявшихся самоубийства. Три униженные служанки. И мраморная лестница, которая ничего не говорит.</span>
-    <span data-tr="epigraph_en">A building. Six floors. Fifteen affairs. Four suicides avoided. Three humiliated servants. And a marble staircase that says nothing.</span>
-  </p>
+            <p class="hero-subtitle">
+                <span data-lang="fr" class="active">d'après Émile Zola · adaptation et mise en scène Vasilii Berezin</span>
+                <span data-lang="en">after Émile Zola · adapted and directed by Vasilii Berezin</span>
+                <span data-lang="ru">по Эмилю Золя · адаптация и режиссура Василий Березин</span>
+            </p>
 
-  <span class="scroll-hint">↓</span>
-</header>
+            <p class="hero-epigraph">
+                <span data-lang="fr" class="active">Un immeuble. Six étages. Quinze adultères. Quatre suicides évités. Trois domestiques humiliées. Et l'escalier en marbre qui ne dit rien.</span>
+                <span data-lang="en">A building. Six floors. Fifteen affairs. Four suicides avoided. Three humiliated servants. And a marble staircase that says nothing.</span>
+                <span data-lang="ru">Дом. Шесть этажей. Пятнадцать измен. Четыре несостоявшихся самоубийства. Три униженные служанки. И мраморная лестница, которая ничего не говорит.</span>
+            </p>
+        </div>
 
-<!-- I. LE ROMAN -->
-<section class="chapter" id="roman">
-  <span class="chapter-num">I.</span>
-  <h2>
-    <span data-tr="ch1_h_fr">Le roman</span>
-    <span data-tr="ch1_h_ru">Роман</span>
-    <span data-tr="ch1_h_en">The novel</span>
-  </h2>
+        <div class="scroll-indicator">scroll</div>
+    </section>
 
-  <div class="prose">
-    <p>
-      <span data-tr="ch1_p1_fr"><em>Pot-Bouille</em> est le neuvième tome des <em>Rougon-Macquart</em>, publié par Émile Zola en 1882. Le roman observe à hauteur d'escalier la vie d'un immeuble bourgeois rue de Choiseul, dans le neuvième arrondissement de Paris. Octave Mouret, jeune provincial monté à la capitale, traverse les étages, séduit les femmes, échoue, recommence. Au-dessus, la respectabilité ; en-dessous, les domestiques. Entre les deux, l'escalier — ce muet de marbre qui sait tout, qui ne dit rien.</span>
-      <span data-tr="ch1_p1_ru"><em>Накипь</em> — девятый том <em>Ругон-Маккаров</em>, изданный Эмилем Золя в 1882 году. Роман смотрит с высоты лестничной клетки на жизнь буржуазного дома в улице Шуазёль, в девятом округе Парижа. Октав Муре, молодой провинциал, приехавший в столицу, проходит этажи, соблазняет женщин, проваливается, начинает снова. Над ним — респектабельность ; под ним — слуги. Между ними — лестница, мраморный немой, который всё знает и ничего не говорит.</span>
-      <span data-tr="ch1_p1_en"><em>Pot-Bouille</em> is the ninth volume of the <em>Rougon-Macquart</em>, published by Émile Zola in 1882. The novel watches from the height of the stairwell the life of a bourgeois building on rue de Choiseul, in the ninth arrondissement of Paris. Octave Mouret, a young provincial come up to the capital, crosses the floors, seduces women, fails, starts again. Above, respectability; below, the servants. Between them, the staircase — a marble mute that knows everything and says nothing.</span>
-    </p>
+    <!-- ===================== I. LE ROMAN ===================== -->
+    <section class="section fade-in" id="roman">
+        <div class="section-label">
+            <span class="chapter-num">I.</span>
+            <span data-lang="fr" class="active">Le roman</span>
+            <span data-lang="en">The novel</span>
+            <span data-lang="ru">Роман</span>
+        </div>
 
-    <p>
-      <span data-tr="ch1_p2_fr">Zola a posé son microscope sur le mensonge bourgeois quotidien. Il n'a pas écrit un livre moral ; il a écrit une autopsie. C'est ce qui le rend intolérable — et lisible aujourd'hui.</span>
-      <span data-tr="ch1_p2_ru">Золя поставил микроскоп на ежедневную буржуазную ложь. Он не писал моральную книгу ; он писал вскрытие. Именно это делает её невыносимой — и читаемой сегодня.</span>
-      <span data-tr="ch1_p2_en">Zola placed his microscope on the everyday bourgeois lie. He did not write a moral book; he wrote an autopsy. That is what makes it unbearable — and readable today.</span>
-    </p>
-  </div>
-</section>
+        <div data-lang="fr" class="active">
+            <h2>L'autopsie d'un immeuble bourgeois</h2>
+            <p><em>Pot-Bouille</em> est le neuvième tome des <em>Rougon-Macquart</em>, publié par Émile Zola en 1882. Le roman observe à hauteur d'escalier la vie d'un immeuble bourgeois rue de Choiseul, dans le neuvième arrondissement de Paris. Octave Mouret, jeune provincial monté à la capitale, traverse les étages, séduit les femmes, échoue, recommence. Au-dessus, la respectabilité ; en-dessous, les domestiques. Entre les deux, l'escalier — ce muet de marbre qui sait tout, qui ne dit rien.</p>
+            <p>Zola a posé son microscope sur le mensonge bourgeois quotidien. Il n'a pas écrit un livre moral ; il a écrit une autopsie. C'est ce qui le rend intolérable — et lisible aujourd'hui.</p>
+        </div>
+        <div data-lang="en">
+            <h2>The autopsy of a bourgeois building</h2>
+            <p><em>Pot-Bouille</em> is the ninth volume of the <em>Rougon-Macquart</em>, published by Émile Zola in 1882. The novel watches from the height of the stairwell the life of a bourgeois building on rue de Choiseul, in the ninth arrondissement of Paris. Octave Mouret, a young provincial come up to the capital, crosses the floors, seduces women, fails, starts again. Above, respectability; below, the servants. Between them, the staircase — a marble mute that knows everything and says nothing.</p>
+            <p>Zola placed his microscope on the everyday bourgeois lie. He did not write a moral book; he wrote an autopsy. That is what makes it unbearable — and readable today.</p>
+        </div>
+        <div data-lang="ru">
+            <h2>Вскрытие буржуазного дома</h2>
+            <p><em>Накипь</em> — девятый том <em>Ругон-Маккаров</em>, изданный Эмилем Золя в 1882 году. Роман смотрит с высоты лестничной клетки на жизнь буржуазного дома в улице Шуазёль, в девятом округе Парижа. Октав Муре, молодой провинциал, приехавший в столицу, проходит этажи, соблазняет женщин, проваливается, начинает снова. Над ним — респектабельность; под ним — слуги. Между ними — лестница, мраморный немой, который всё знает и ничего не говорит.</p>
+            <p>Золя поставил микроскоп на ежедневную буржуазную ложь. Он не писал моральную книгу; он писал вскрытие. Именно это делает её невыносимой — и читаемой сегодня.</p>
+        </div>
+    </section>
 
-<!-- II. ADAPTATION -->
-<section class="chapter" id="adaptation">
-  <span class="chapter-num">II.</span>
-  <h2>
-    <span data-tr="ch2_h_fr">L'adaptation</span>
-    <span data-tr="ch2_h_ru">Адаптация</span>
-    <span data-tr="ch2_h_en">The adaptation</span>
-  </h2>
+    <!-- Sketch: concept -->
+    <div class="sketch-container fade-in">
+        <img src="img/page-02.jpg" alt="Esquisse — l'immeuble">
+        <div class="sketch-caption">
+            <span data-lang="fr" class="active">Esquisse · l'immeuble comme scène</span>
+            <span data-lang="en">Sketch · the building as stage</span>
+            <span data-lang="ru">Эскиз · дом как сцена</span>
+        </div>
+    </div>
 
-  <div class="prose">
-    <p>
-      <span data-tr="ch2_p1_fr">Mon adaptation est resserrée en <strong>deux actes</strong>, pour <strong>quatre rôles principaux</strong> et <strong>six secondaires</strong>. Elle transpose la mécanique sociale de 1882 dans un dispositif scénique contemporain — sans changer d'époque, sans actualiser les costumes, sans toutes ces ruses. Ce qui change est plus radical : le <em>regard</em>.</span>
-      <span data-tr="ch2_p1_ru">Моя адаптация сжата до <strong>двух актов</strong>, на <strong>четыре главные роли</strong> и <strong>шесть второстепенных</strong>. Она переносит социальную механику 1882 года в современный сценический dispositif — не меняя эпоху, не обновляя костюмы, без всех этих хитростей. Меняется более радикальное : <em>взгляд</em>.</span>
-      <span data-tr="ch2_p1_en">My adaptation is condensed into <strong>two acts</strong>, for <strong>four principal roles</strong> and <strong>six supporting</strong>. It transposes the social mechanics of 1882 into a contemporary stage device — without changing the period, without updating the costumes, without any of those tricks. What changes is more radical: the <em>gaze</em>.</span>
-    </p>
+    <div class="divider"></div>
 
-    <p>
-      <span data-tr="ch2_p2_fr">Là où Zola, en 1882, s'indignait, je documente. Là où il moralisait à voix haute, je laisse parler le silence du marbre. Le <em>geste théâtral</em> ne dénonce pas — il <em>désincarne</em> la scène domestique pour la rendre lisible comme un fragment de protocole.</span>
-      <span data-tr="ch2_p2_ru">Там, где Золя в 1882 году возмущался, я документирую. Там, где он морализирует вслух, я даю заговорить тишине мрамора. <em>Театральный жест</em> не обличает — он <em>обездушивает</em> бытовую сцену, чтобы сделать её читаемой как фрагмент протокола.</span>
-      <span data-tr="ch2_p2_en">Where Zola, in 1882, was indignant, I document. Where he moralised aloud, I let the silence of the marble speak. The <em>theatrical gesture</em> does not denounce — it <em>disembodies</em> the domestic scene so as to make it readable as a fragment of protocol.</span>
-    </p>
+    <!-- ===================== II. L'ADAPTATION ===================== -->
+    <section class="section fade-in" id="adaptation">
+        <div class="section-label">
+            <span class="chapter-num">II.</span>
+            <span data-lang="fr" class="active">L'adaptation</span>
+            <span data-lang="en">The adaptation</span>
+            <span data-lang="ru">Адаптация</span>
+        </div>
 
-    <p>
-      <span data-tr="ch2_p3_fr">Le procédé est proche de celui que <strong>Konstantin Bogomolov</strong> a développé au MKhAT et que j'ai pratiqué dans son atelier à Moscou (2016-2018) : tenir le texte à distance par <strong>la précision du geste</strong>, faire de la dramaturgie une affaire d'arpenteurs.</span>
-      <span data-tr="ch2_p3_ru">Метод близок тому, что <strong>Константин Богомолов</strong> разработал во МХАТе и что я практиковал в его мастерской в Москве (2016-2018) : держать текст на дистанции <strong>точностью жеста</strong>, превращать драматургию в дело землемеров.</span>
-      <span data-tr="ch2_p3_en">The procedure is close to what <strong>Konstantin Bogomolov</strong> developed at the MKhAT and which I practised in his workshop in Moscow (2016-2018): holding the text at a distance through <strong>the precision of gesture</strong>, turning dramaturgy into a surveyor's business.</span>
-    </p>
-  </div>
-</section>
+        <div data-lang="fr" class="active">
+            <h2>Documenter, ne pas dénoncer</h2>
+            <p>Mon adaptation est resserrée en <strong>deux actes</strong>, pour <strong>quatre rôles principaux</strong> et <strong>six secondaires</strong>. Elle transpose la mécanique sociale de 1882 dans un dispositif scénique contemporain — sans changer d'époque, sans actualiser les costumes, sans toutes ces ruses. Ce qui change est plus radical : le <em>regard</em>.</p>
+            <p>Là où Zola, en 1882, s'indignait, je documente. Là où il moralisait à voix haute, je laisse parler le silence du marbre. Le <em>geste théâtral</em> ne dénonce pas — il <em>désincarne</em> la scène domestique pour la rendre lisible comme un fragment de protocole.</p>
+            <p>Le procédé est proche de celui que <strong>Konstantin Bogomolov</strong> a développé au MKhAT et que j'ai pratiqué dans son atelier à Moscou (2016-2018) : tenir le texte à distance par <strong>la précision du geste</strong>, faire de la dramaturgie une affaire d'arpenteurs.</p>
+        </div>
+        <div data-lang="en">
+            <h2>To document, not to denounce</h2>
+            <p>My adaptation is condensed into <strong>two acts</strong>, for <strong>four principal roles</strong> and <strong>six supporting</strong>. It transposes the social mechanics of 1882 into a contemporary stage device — without changing the period, without updating the costumes, without any of those tricks. What changes is more radical: the <em>gaze</em>.</p>
+            <p>Where Zola, in 1882, was indignant, I document. Where he moralised aloud, I let the silence of the marble speak. The <em>theatrical gesture</em> does not denounce — it <em>disembodies</em> the domestic scene so as to make it readable as a fragment of protocol.</p>
+            <p>The procedure is close to what <strong>Konstantin Bogomolov</strong> developed at the MKhAT and which I practised in his workshop in Moscow (2016-2018): holding the text at a distance through <strong>the precision of gesture</strong>, turning dramaturgy into a surveyor's business.</p>
+        </div>
+        <div data-lang="ru">
+            <h2>Документировать, не обличать</h2>
+            <p>Моя адаптация сжата до <strong>двух актов</strong>, на <strong>четыре главные роли</strong> и <strong>шесть второстепенных</strong>. Она переносит социальную механику 1882 года в современный сценический dispositif — не меняя эпоху, не обновляя костюмы, без всех этих хитростей. Меняется более радикальное: <em>взгляд</em>.</p>
+            <p>Там, где Золя в 1882 году возмущался, я документирую. Там, где он морализирует вслух, я даю заговорить тишине мрамора. <em>Театральный жест</em> не обличает — он <em>обездушивает</em> бытовую сцену, чтобы сделать её читаемой как фрагмент протокола.</p>
+            <p>Метод близок тому, что <strong>Константин Богомолов</strong> разработал во МХАТе и что я практиковал в его мастерской в Москве (2016-2018): держать текст на дистанции <strong>точностью жеста</strong>, превращать драматургию в дело землемеров.</p>
+        </div>
+    </section>
 
-<!-- III. KOMUNUMA -->
-<section class="chapter" id="komunuma">
-  <span class="chapter-num">III.</span>
-  <h2>
-    <span data-tr="ch3_h_fr">Komunuma — l'inversion</span>
-    <span data-tr="ch3_h_ru">Комунума — инверсия</span>
-    <span data-tr="ch3_h_en">Komunuma — the inversion</span>
-  </h2>
+    <!-- Sketch pair -->
+    <div class="sketch-pair fade-in">
+        <img src="img/page-03.jpg" alt="Adaptation — gesture">
+        <img src="img/page-04.jpg" alt="Adaptation — protocol">
+    </div>
 
-  <div class="prose">
-    <p>
-      <span data-tr="ch3_p1_fr">Le projet sera mis en plateau pendant ma résidence à la <strong>Fondation Fiminco</strong>, dans le quartier <strong>Komunuma</strong> à Romainville (Grand Paris) — ancien site industriel reconverti en quartier d'art contemporain. C'est le <em>double inversé</em> du décor zolien : là où Zola peignait un immeuble bourgeois sous le regard de l'écrivain, je peindrai la classe artistique elle-même se regardant dans un cadre industriel reconverti.</span>
-      <span data-tr="ch3_p1_ru">Проект будет выведен на сцену во время моей резиденции в <strong>Fondation Fiminco</strong>, в квартале <strong>Komunuma</strong> в Romainville (Большой Париж) — бывший индустриальный участок, переустроенный в квартал современного искусства. Это <em>обратный двойник</em> декорации Золя : там, где Золя писал буржуазный дом под взглядом писателя, я напишу самих художников, наблюдающих себя в промышленной среде.</span>
-      <span data-tr="ch3_p1_en">The project will be staged during my residency at the <strong>Fondation Fiminco</strong>, in the <strong>Komunuma</strong> district of Romainville (Greater Paris) — a former industrial site reconverted into a contemporary-art neighborhood. This is the <em>inverse double</em> of Zola's décor: where Zola painted a bourgeois building under the writer's gaze, I will paint the artistic class itself watching itself in a reconverted industrial setting.</span>
-    </p>
+    <div class="divider"></div>
 
-    <p>
-      <span data-tr="ch3_p2_fr">Les espaces communs du bâtiment FAST de la Fondation — escalier de service, kitchenette partagée, terrasse — deviendront <em>décors trouvés</em>. Les rôles secondaires seront portés par certains artistes en résidence parallèles (visual arts, métiers d'art) : c'est-à-dire que le public regardera des artistes contemporains jouer des bourgeois de 1882, dans un bâtiment industriel reconverti en lieu d'art. Ce dispositif transforme le geste théâtral en geste documentaire sur l'<strong>auto-représentation de la classe artistique</strong>.</span>
-      <span data-tr="ch3_p2_ru">Общие пространства здания FAST Фондации — чёрная лестница, общая кухонька, терраса — станут <em>найденной декорацией</em>. Второстепенные роли исполнят некоторые из параллельных резидентов (visual arts, métiers d'art) : то есть публика увидит, как современные художники играют буржуа 1882 года в промышленном здании, переустроенном в место искусства. Этот dispositif превращает театральный жест в документальный жест об <strong>автопрезентации класса художников</strong>.</span>
-      <span data-tr="ch3_p2_en">The communal spaces of the Foundation's FAST building — service stair, shared kitchenette, terrace — will become <em>found decors</em>. The supporting roles will be carried by some of the parallel residents (visual arts, métiers d'art): that is, the public will watch contemporary artists play 1882 bourgeois figures, in an industrial building reconverted into a place of art. The device turns the theatrical gesture into a documentary gesture on the <strong>self-representation of the artistic class</strong>.</span>
-    </p>
-  </div>
-</section>
+    <!-- ===================== III. KOMUNUMA ===================== -->
+    <section class="section fade-in" id="komunuma">
+        <div class="section-label">
+            <span class="chapter-num">III.</span>
+            <span data-lang="fr" class="active">Komunuma — l'inversion</span>
+            <span data-lang="en">Komunuma — the inversion</span>
+            <span data-lang="ru">Комунума — инверсия</span>
+        </div>
 
-<!-- IV. ÉQUIPE -->
-<section class="chapter" id="equipe">
-  <span class="chapter-num">IV.</span>
-  <h2>
-    <span data-tr="ch4_h_fr">Équipe</span>
-    <span data-tr="ch4_h_ru">Команда</span>
-    <span data-tr="ch4_h_en">Team</span>
-  </h2>
+        <div data-lang="fr" class="active">
+            <h2>Un double inversé du décor zolien</h2>
+            <p>Le projet sera mis en plateau pendant ma résidence à la <strong>Fondation Fiminco</strong>, dans le quartier <strong>Komunuma</strong> à Romainville (Grand Paris) — ancien site industriel reconverti en quartier d'art contemporain. C'est le <em>double inversé</em> du décor zolien : là où Zola peignait un immeuble bourgeois sous le regard de l'écrivain, je peindrai la classe artistique elle-même se regardant dans un cadre industriel reconverti.</p>
+            <p>Les espaces communs du bâtiment FAST de la Fondation — escalier de service, kitchenette partagée, terrasse — deviendront <em>décors trouvés</em>. Les rôles secondaires seront portés par certains artistes en résidence parallèles (visual arts, métiers d'art) : c'est-à-dire que le public regardera des artistes contemporains jouer des bourgeois de 1882, dans un bâtiment industriel reconverti en lieu d'art. Ce dispositif transforme le geste théâtral en geste documentaire sur l'<strong>auto-représentation de la classe artistique</strong>.</p>
+        </div>
+        <div data-lang="en">
+            <h2>An inverse double of Zola's décor</h2>
+            <p>The project will be staged during my residency at the <strong>Fondation Fiminco</strong>, in the <strong>Komunuma</strong> district of Romainville (Greater Paris) — a former industrial site reconverted into a contemporary-art neighborhood. This is the <em>inverse double</em> of Zola's décor: where Zola painted a bourgeois building under the writer's gaze, I will paint the artistic class itself watching itself in a reconverted industrial setting.</p>
+            <p>The communal spaces of the Foundation's FAST building — service stair, shared kitchenette, terrace — will become <em>found decors</em>. The supporting roles will be carried by some of the parallel residents (visual arts, métiers d'art): that is, the public will watch contemporary artists play 1882 bourgeois figures, in an industrial building reconverted into a place of art. The device turns the theatrical gesture into a documentary gesture on the <strong>self-representation of the artistic class</strong>.</p>
+        </div>
+        <div data-lang="ru">
+            <h2>Обратный двойник декорации Золя</h2>
+            <p>Проект будет выведен на сцену во время моей резиденции в <strong>Fondation Fiminco</strong>, в квартале <strong>Komunuma</strong> в Romainville (Большой Париж) — бывший индустриальный участок, переустроенный в квартал современного искусства. Это <em>обратный двойник</em> декорации Золя: там, где Золя писал буржуазный дом под взглядом писателя, я напишу самих художников, наблюдающих себя в промышленной среде.</p>
+            <p>Общие пространства здания FAST Фондации — чёрная лестница, общая кухонька, терраса — станут <em>найденной декорацией</em>. Второстепенные роли исполнят некоторые из параллельных резидентов (visual arts, métiers d'art): то есть публика увидит, как современные художники играют буржуа 1882 года в промышленном здании, переустроенном в место искусства. Этот dispositif превращает театральный жест в документальный жест об <strong>автопрезентации класса художников</strong>.</p>
+        </div>
+    </section>
 
-  <div class="prose">
-    <p>
-      <span data-tr="ch4_p1_fr">Adaptation, mise en scène et conception scénographique : <strong>Vasilii Berezin</strong>. Quatre rôles principaux et six secondaires en cours de distribution.</span>
-      <span data-tr="ch4_p1_ru">Адаптация, режиссура и сценография : <strong>Василий Березин</strong>. Четыре главные роли и шесть второстепенных в работе.</span>
-      <span data-tr="ch4_p1_en">Adaptation, direction and stage design: <strong>Vasilii Berezin</strong>. Four principal roles and six supporting roles being cast.</span>
-    </p>
+    <!-- Full bleed sketch -->
+    <div class="sketch-full fade-in">
+        <img src="img/page-05.jpg" alt="Komunuma — the inverted double">
+    </div>
 
-    <p>
-      <span data-tr="ch4_p2_fr">Structure porteuse : <strong>Association Microcrédit</strong> (loi 1901, Noisy-le-Grand) — <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>.</span>
-      <span data-tr="ch4_p2_ru">Структура-носитель : <strong>Association Microcrédit</strong> (loi 1901, Noisy-le-Grand) — <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>.</span>
-      <span data-tr="ch4_p2_en">Producing structure: <strong>Association Microcrédit</strong> (loi 1901, Noisy-le-Grand) — <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>.</span>
-    </p>
+    <!-- ===================== QUOTE ===================== -->
+    <section class="quote-section fade-in">
+        <blockquote>
+            <span data-lang="fr" class="active">L'escalier est en marbre. Il sait tout. Il ne dit rien.</span>
+            <span data-lang="en">The staircase is of marble. It knows everything. It says nothing.</span>
+            <span data-lang="ru">Лестница из мрамора. Она знает всё. Она ничего не говорит.</span>
+        </blockquote>
+        <div class="quote-attr">
+            <span data-lang="fr" class="active">— Note de mise en scène</span>
+            <span data-lang="en">— Director's note</span>
+            <span data-lang="ru">— Режиссёрская заметка</span>
+        </div>
+    </section>
 
-    <p>
-      <span data-tr="ch4_p3_fr">Soutiens identifiés : Fondation Fiminco × Adami (résidence La Fabrique des Arts Vivants 2027), Kone Foundation (via Binary BioTheater), DRAC Île-de-France (en cours).</span>
-      <span data-tr="ch4_p3_ru">Партнёры : Fondation Fiminco × Adami (резиденция La Fabrique des Arts Vivants 2027), Kone Foundation (через Binary BioTheater), DRAC Île-de-France (в работе).</span>
-      <span data-tr="ch4_p3_en">Identified supports: Fondation Fiminco × Adami (La Fabrique des Arts Vivants residency 2027), Kone Foundation (via Binary BioTheater), DRAC Île-de-France (in progress).</span>
-    </p>
-  </div>
-</section>
+    <div class="divider"></div>
 
-<!-- V. CALENDRIER -->
-<section class="chapter calendrier" id="calendrier">
-  <span class="chapter-num">V.</span>
-  <h2>
-    <span data-tr="ch5_h_fr">Calendrier</span>
-    <span data-tr="ch5_h_ru">Календарь</span>
-    <span data-tr="ch5_h_en">Schedule</span>
-  </h2>
+    <!-- ===================== IV. ÉQUIPE ===================== -->
+    <section class="section fade-in" id="equipe">
+        <div class="section-label">
+            <span class="chapter-num">IV.</span>
+            <span data-lang="fr" class="active">Équipe &middot; structure</span>
+            <span data-lang="en">Team &middot; structure</span>
+            <span data-lang="ru">Команда &middot; структура</span>
+        </div>
 
-  <ol class="timeline">
-    <li>
-      <span class="dot"></span>
-      <span class="when">10·05·2026</span>
-      <span class="what">
-        <span data-tr="cal_fim_fr">Dépôt du dossier — Fondation Fiminco × Adami</span>
-        <span data-tr="cal_fim_ru">Подача — Fondation Fiminco × Adami</span>
-        <span data-tr="cal_fim_en">Submission — Fondation Fiminco × Adami</span>
-      </span>
-    </li>
-    <li>
-      <span class="dot"></span>
-      <span class="when">07·2026</span>
-      <span class="what">
-        <span data-tr="cal_res_fr">Résultats Fondation Fiminco</span>
-        <span data-tr="cal_res_ru">Результаты Fondation Fiminco</span>
-        <span data-tr="cal_res_en">Fondation Fiminco results</span>
-      </span>
-    </li>
-    <li>
-      <span class="dot"></span>
-      <span class="when">03–05·2027</span>
-      <span class="what">
-        <span data-tr="cal_resid_fr">Résidence Fondation Fiminco — 2 mois — étape de travail Komunuma</span>
-        <span data-tr="cal_resid_ru">Резиденция Fondation Fiminco — 2 месяца — open work Komunuma</span>
-        <span data-tr="cal_resid_en">Fondation Fiminco residency — 2 months — work-in-progress Komunuma</span>
-      </span>
-    </li>
-    <li>
-      <span class="dot"></span>
-      <span class="when">2027 / 2028</span>
-      <span class="what">
-        <span data-tr="cal_create_fr">Création complète — Maison des Métallos / Théâtre Gérard Philipe / T2G (cibles)</span>
-        <span data-tr="cal_create_ru">Полная премьера — Maison des Métallos / Théâtre Gérard Philipe / T2G (цели)</span>
-        <span data-tr="cal_create_en">Full creation — Maison des Métallos / Théâtre Gérard Philipe / T2G (targets)</span>
-      </span>
-    </li>
-    <li>
-      <span class="dot"></span>
-      <span class="when">2028 / 2029</span>
-      <span class="what">
-        <span data-tr="cal_tour_fr">Tournée — IDF + Komuna Warszawa + Gesher (Israël) en discussion</span>
-        <span data-tr="cal_tour_ru">Гастроли — IDF + Komuna Warszawa + Гешер (Израиль) в обсуждении</span>
-        <span data-tr="cal_tour_en">Tour — IDF + Komuna Warszawa + Gesher (Israel) under discussion</span>
-      </span>
-    </li>
-  </ol>
-</section>
+        <div data-lang="fr" class="active">
+            <h2>Auteur, structure porteuse, soutiens</h2>
+            <p>Adaptation, mise en scène et conception scénographique : <strong>Vasilii Berezin</strong>. Quatre rôles principaux et six secondaires en cours de distribution.</p>
+            <p>Structure porteuse : <strong>Association Microcrédit</strong> (loi 1901, Noisy-le-Grand) — <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>.</p>
+            <p>Soutiens identifiés : Fondation Fiminco × Adami (résidence La Fabrique des Arts Vivants 2027), Kone Foundation (via Binary BioTheater), DRAC Île-de-France (en cours).</p>
+        </div>
+        <div data-lang="en">
+            <h2>Author, producing structure, supports</h2>
+            <p>Adaptation, direction and stage design: <strong>Vasilii Berezin</strong>. Four principal roles and six supporting roles being cast.</p>
+            <p>Producing structure: <strong>Association Microcrédit</strong> (loi 1901, Noisy-le-Grand) — <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>.</p>
+            <p>Identified supports: Fondation Fiminco × Adami (La Fabrique des Arts Vivants residency 2027), Kone Foundation (via Binary BioTheater), DRAC Île-de-France (in progress).</p>
+        </div>
+        <div data-lang="ru">
+            <h2>Автор, структура-носитель, партнёры</h2>
+            <p>Адаптация, режиссура и сценография: <strong>Василий Березин</strong>. Четыре главные роли и шесть второстепенных в работе.</p>
+            <p>Структура-носитель: <strong>Association Microcrédit</strong> (loi 1901, Noisy-le-Grand) — <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>.</p>
+            <p>Партнёры: Fondation Fiminco × Adami (резиденция La Fabrique des Arts Vivants 2027), Kone Foundation (через Binary BioTheater), DRAC Île-de-France (в работе).</p>
+        </div>
+    </section>
 
-<!-- FOOTER -->
-<footer>
-  <p>
-    <span data-tr="footer_fr">Site tenu par l'auteur. Paris.</span>
-    <span data-tr="footer_ru">Сайт ведёт автор. Париж.</span>
-    <span data-tr="footer_en">Site maintained by the author. Paris.</span>
-  </p>
-  <p class="contact">
-    <a href="mailto:vasiliyberezin.art@gmail.com">vasiliyberezin.art@gmail.com</a>
-    <span class="sep">·</span>
-    <a href="https://www.instagram.com/berezinvasya" target="_blank" rel="noopener">@berezinvasya</a>
-  </p>
-  <p class="meta">
-    <span data-tr="footer_meta_fr">Le texte d'Émile Zola est dans le domaine public.</span>
-    <span data-tr="footer_meta_ru">Текст Эмиля Золя в общественном достоянии.</span>
-    <span data-tr="footer_meta_en">Émile Zola's text is in the public domain.</span>
-  </p>
-</footer>
+    <!-- Sketch -->
+    <div class="sketch-container fade-in">
+        <img src="img/page-06.jpg" alt="Équipe — assembly">
+    </div>
 
-<script src="script.js"></script>
+    <div class="divider"></div>
+
+    <!-- ===================== V. CALENDRIER ===================== -->
+    <section class="section fade-in" id="calendrier">
+        <div class="section-label">
+            <span class="chapter-num">V.</span>
+            <span data-lang="fr" class="active">Calendrier</span>
+            <span data-lang="en">Schedule</span>
+            <span data-lang="ru">Календарь</span>
+        </div>
+
+        <div data-lang="fr" class="active"><h2>De la candidature à la tournée</h2></div>
+        <div data-lang="en"><h2>From submission to tour</h2></div>
+        <div data-lang="ru"><h2>От подачи до гастролей</h2></div>
+
+        <ol class="timeline">
+            <li>
+                <span class="when">10·05·2026</span>
+                <span class="what">
+                    <span data-lang="fr" class="active">Dépôt du dossier — Fondation Fiminco × Adami</span>
+                    <span data-lang="en">Submission — Fondation Fiminco × Adami</span>
+                    <span data-lang="ru">Подача — Fondation Fiminco × Adami</span>
+                </span>
+            </li>
+            <li>
+                <span class="when">07 · 2026</span>
+                <span class="what">
+                    <span data-lang="fr" class="active">Résultats Fondation Fiminco</span>
+                    <span data-lang="en">Fondation Fiminco results</span>
+                    <span data-lang="ru">Результаты Fondation Fiminco</span>
+                </span>
+            </li>
+            <li>
+                <span class="when">03–05 · 2027</span>
+                <span class="what">
+                    <span data-lang="fr" class="active">Résidence Fondation Fiminco — 2 mois — étape de travail Komunuma</span>
+                    <span data-lang="en">Fondation Fiminco residency — 2 months — work-in-progress Komunuma</span>
+                    <span data-lang="ru">Резиденция Fondation Fiminco — 2 месяца — open work Komunuma</span>
+                </span>
+            </li>
+            <li>
+                <span class="when">2027 / 2028</span>
+                <span class="what">
+                    <span data-lang="fr" class="active">Création complète — Maison des Métallos / Théâtre Gérard Philipe / T2G (cibles)</span>
+                    <span data-lang="en">Full creation — Maison des Métallos / Théâtre Gérard Philipe / T2G (targets)</span>
+                    <span data-lang="ru">Полная премьера — Maison des Métallos / Théâtre Gérard Philipe / T2G (цели)</span>
+                </span>
+            </li>
+            <li>
+                <span class="when">2028 / 2029</span>
+                <span class="what">
+                    <span data-lang="fr" class="active">Tournée — IDF + Komuna Warszawa + Gesher (Israël) en discussion</span>
+                    <span data-lang="en">Tour — IDF + Komuna Warszawa + Gesher (Israel) under discussion</span>
+                    <span data-lang="ru">Гастроли — IDF + Komuna Warszawa + Гешер (Израиль) в обсуждении</span>
+                </span>
+            </li>
+        </ol>
+    </section>
+
+    <!-- Final sketch -->
+    <div class="sketch-container fade-in">
+        <img src="img/page-09.jpg" alt="Final — the marble staircase">
+        <div class="sketch-caption">
+            <span data-lang="fr" class="active">L'escalier de marbre · note finale</span>
+            <span data-lang="en">The marble staircase · closing note</span>
+            <span data-lang="ru">Мраморная лестница · финальная заметка</span>
+        </div>
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <p>
+            <span data-lang="fr" class="active">Site tenu par l'auteur. Paris.</span>
+            <span data-lang="en">Site maintained by the author. Paris.</span>
+            <span data-lang="ru">Сайт ведёт автор. Париж.</span>
+        </p>
+        <div class="footer-row">
+            <a href="mailto:vasiliyberezin.art@gmail.com">vasiliyberezin.art@gmail.com</a>
+            <span style="opacity:0.4">·</span>
+            <a href="https://www.instagram.com/berezinvasya" target="_blank" rel="noopener">@berezinvasya</a>
+            <span style="opacity:0.4">·</span>
+            <a href="https://microcredit.art" target="_blank" rel="noopener">microcredit.art</a>
+        </div>
+        <p class="meta">
+            <span data-lang="fr" class="active">Le texte d'Émile Zola est dans le domaine public.</span>
+            <span data-lang="en">Émile Zola's text is in the public domain.</span>
+            <span data-lang="ru">Текст Эмиля Золя в общественном достоянии.</span>
+        </p>
+    </footer>
+
+    <script>
+        function setLang(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+            document.querySelectorAll('.lang-switch button').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
+            });
+            document.documentElement.lang = lang;
+        }
+
+        // Fade-in on scroll (only enabled when JS runs and reduced-motion is off)
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('js-fade');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.05, rootMargin: '0px 0px -10% 0px' });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+            // Safety fallback — if anything is still hidden after 1.5s, reveal it
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
+            }, 1500);
+        }
+    </script>
+
 </body>
 </html>
